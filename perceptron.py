@@ -17,8 +17,17 @@ class Perceptron:
             activation = 1
         else:
             activation = 0
-        return activation
+        return activation, sum
 
     def train(self, training_inputs, labels):
-        pass
-
+        mse = []
+        for _ in range(self.epochs):
+            squerd_loss = []
+            for inputs, label in zip(training_inputs, labels):
+                prediction, sum = self.predict(inputs)
+                loss = label - prediction
+                squerd_loss.append(loss**2)
+                self.weights[1:] += self.learning_rate * (label - prediction) * inputs
+                self.weights[0] += self.learning_rate * (label - prediction)
+            mse.append(np.mean(squerd_loss))
+        return mse
